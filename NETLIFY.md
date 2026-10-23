@@ -18,4 +18,13 @@ Configure these values in **Project configuration → Environment variables**:
 
 Redeploy after setting environment variables. For local Netlify development, install the npm dependencies, place these settings in an ignored `.env` file, and run `npm run dev`.
 
+### Enable live weather
+
+1. Create or sign in to an account at [OpenWeather](https://openweathermap.org/).
+2. Open your account's **API keys** page and copy an API key. OpenWeather documents that its API key is required on each weather request. [OpenWeather API key guide](https://openweathermap.org/appid)
+3. In Netlify, open **Project configuration → Environment variables** and add `OPENWEATHER_API_KEY` with the copied value. Keep it in the Functions/runtime scope; the browser never needs the key.
+4. Trigger a new deploy so the function receives the variable. The dashboard requests weather for the visitor's location when permitted, and falls back to Ahmedabad when location access is denied. It refreshes weather every 10 minutes.
+
+For local development only, put the key after `OPENWEATHER_API_KEY=` in your ignored `.env` file. Never commit or share the key.
+
 The soil classifier remains a brightness-based demo, not a trained agronomy model. Netlify Blobs provides lightweight key/value persistence here; use a relational database if you need transactions or richer account queries.

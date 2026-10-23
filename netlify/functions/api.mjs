@@ -172,17 +172,32 @@ async function handle(request, action) {
 
   if (action === "live-data" && request.method === "GET") {
     const key = process.env.OPENWEATHER_API_KEY;
-    if (!key) return json({ temperature: "--", humidity: "--", wind: "--", error: "Weather service is not configured." });
+    if (!key) return json({ temperature: "--", humidity: "--", wind: "--", error: "Weather service is not configured. Add OPENWEATHER_API_KEY in Netlify." }, 503);
     const url = new URL("https://api.openweathermap.org/data/2.5/weather");
     url.searchParams.set("appid", key);
     url.searchParams.set("units", "metric");
-    if (urlSearch(request, "lat") && urlSearch(request, "lon")) {
-      url.searchParams.set("lat", urlSearch(request, "lat")); url.searchParams.set("lon", urlSearch(request, "lon"));
-    } else url.searchParams.set("q", "Ahmedabad");
-    const response = await fetch(url);
+    const latitude = urlSearch(request, "lat");
+    const longitude = urlSearch(request, "lon");
+    if (latitude !== "" && longitude !== "") {
+      url.searchParams.set("lat", latitude);
+      url.searchParams.set("lon", longitude);
+    } else {
+      // Default farm location: Ahmedabad, India.
+      url.searchParams.set("lat", "23.0225");
+      url.searchParams.set("lon", "72.5714");
+    }
+    const response = await fetch(url, { signal: AbortSignal.timeout(10000) });
     const data = await response.json();
-    if (!response.ok || !data.main) return json({ temperature: "--", humidity: "--", wind: "--", error: "Weather service request failed." }, 502);
-    return json({ temperature: data.main.temp, humidity: data.main.humidity, wind: data.wind?.speed ?? "--" });
+    if (!response.ok || !data.main) {
+      const message = response.status === 401
+        ? "OpenWeather rejected the API key. Check OPENWEATHER_API_KEY."
+        : response.status === 429
+          ? "OpenWeather rate limit reached. Try again later."
+          : "Weather provider could not return data for this location.";
+      return json({ temperature: "--", humidity: "--", wind: "--", error: message }, 502);
+    }
+    const windKmh = Number.isFinite(data.wind?.speed) ? Math.round(data.wind.speed * 36) / 10 : "--";
+    return json({ temperature: data.main.temp, humidity: data.main.humidity, wind: windKmh, location: data.name });
   }
 
   if (action === "analyze-image" && request.method === "POST") {

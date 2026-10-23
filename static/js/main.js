@@ -125,10 +125,14 @@ function updateLocationData(newLat, newLon) {
 }
 
 /* Load map when page opens */
-window.onload = function () {
-    initMap();
+window.addEventListener("load", function () {
+    try {
+        if (document.getElementById("map") && window.google && window.google.maps) initMap();
+    } catch (error) {
+        console.warn("Map could not be initialized:", error);
+    }
     initLocation();
-};
+});
 /* ================= CROP CHART ================= */
 
 if(document.getElementById("cropChart")){
@@ -189,31 +193,41 @@ let lon = null;
 function initLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
-
             lat = position.coords.latitude;
             lon = position.coords.longitude;
-
-            console.log("LAT:", lat, "LON:", lon);  // ✅ CORRECT PLACE
-
             getWeather();
-
-        });
+        }, () => {
+            lat = null;
+            lon = null;
+            getWeather(); // The API falls back to Ahmedabad if location is unavailable.
+        }, { timeout: 8000, maximumAge: 600000 });
     } else {
-        alert("Location not supported");
+        getWeather();
     }
 }
 
 /* Fetch weather using saved lat/lon */ 
 async function getWeather() {
-
-    if (!lat || !lon) return;
-
     try {
-
-        let res = await fetch(`/api/live-data?lat=${lat}&lon=${lon}`);
+        const params = new URLSearchParams();
+        if (lat !== null && lon !== null) {
+            params.set("lat", lat);
+            params.set("lon", lon);
+        }
+        const weatherStatus = document.getElementById("weatherStatus");
+        const res = await fetch(`/api/live-data${params.size ? `?${params}` : ""}`);
         let data = await res.json();
+        if (!res.ok || data.error) {
+            if (weatherStatus) weatherStatus.textContent = data.error || "Weather could not be loaded.";
+            ["temperature", "humidity", "wind"].forEach((id) => {
+                const element = document.getElementById(id);
+                if (element) element.textContent = "--";
+            });
+            return;
+        }
+        if (weatherStatus) weatherStatus.textContent = data.location ? `Current weather for ${data.location}` : "";
         let temp = data.temperature;
-let humidityVal = data.humidity;
+        let humidityVal = data.humidity;
 
 // 🌱 AI suggestion
 let result = getCropSuggestion(temp, humidityVal);
@@ -240,14 +254,13 @@ if(document.getElementById("cropTagline")){
 
     } catch(error){
         console.log("Weather Fetch Error:", error);
+        const weatherStatus = document.getElementById("weatherStatus");
+        if (weatherStatus) weatherStatus.textContent = "Weather could not be loaded. Please try again later.";
     }
 }
 
-/* Run once */
-initLocation();
-
-/* Refresh weather every 10 sec */
-setInterval(getWeather, 10000);
+/* OpenWeather recommends spacing requests for the same location by 10 minutes. */
+setInterval(getWeather, 10 * 60 * 1000);
 
 /* ================= DASHBOARD DATA ================= */
 

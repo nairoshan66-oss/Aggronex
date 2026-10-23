@@ -1,0 +1,7 @@
+Flask
+gunicorn
+requests
+werkzeug
+Flask-Mail
+Pillow
+numpy

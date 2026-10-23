@@ -1,0 +1,315 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>AgroNex Ultimate Dashboard</title>
+
+  <link rel="stylesheet" href="/static/css/style.css">
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0B7liJrj7VJwzw35nQXKB_Zj7DflivVU"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body class="dashboard-page">
+  <nav class="navbar">
+    <a href="/">
+      <div class="logo">🌱 AgroNex</div>
+    </a>
+    
+
+    <div class="menu" onclick="toggleMenu()">☰</div>
+
+    <div class="nav-links" id="navLinks">
+      <a href="/">Home</a>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/about">About</a>
+      <a href="/logout" class="login-highlight">Logout</a>
+    </div>
+  </nav><br><br>
+  <div class="layout">
+
+  <!-- SIDEBAR -->
+
+  <div class="sidebar" id="sidebar">
+
+  <h2></h2>
+
+  <ul>
+
+  <li onclick="showSection('dashboard')" class="active">Dashboard</li>
+  <li onclick="showSection('fields')">Fields</li>
+  <li onclick="showSection('jobs')">Jobs</li>
+  <li onclick="showSection('weather')">Weather</li>
+  <li onclick="showSection('team')">Team</li>
+  <li onclick="showSection('vehicles')">Vehicles</li>
+  <li onclick="showSection('settings')">Settings</li>
+
+  </ul>
+
+  </div>
+
+
+  <!-- MAIN -->
+
+  <div class="main">
+
+  <!-- TOPBAR -->
+
+  <div class="topbar">
+
+  <button onclick="toggleMenu()" class="menuBtn">☰</button>
+
+
+
+  </div>
+
+
+  <!-- ================= DASHBOARD ================= -->
+
+  <div id="dashboard" class="section active">
+
+  <div class="stats">
+
+  <div class="card">
+  <h3>Fields</h3>
+  <h1 id="fieldCount">0</h1>
+  <p>Total Fields</p>
+  </div>
+
+  <div class="card">
+  <h3>Active Jobs</h3>
+  <h1 id="activeJobs">0</h1>
+  <p>Ongoing</p>
+  </div>
+
+  <div class="card">
+  <h3>Jobs Due</h3>
+  <h1 id="jobsDue">0</h1>
+  <p>Pending</p>
+  </div>
+
+  <div class="card">
+  <h3>Completed</h3>
+  <h1 id="jobsCompleted">0</h1>
+  <p>This Month</p>
+  </div>
+
+  </div>
+
+
+  <!-- MAP + CROPS -->
+
+  <div class="grid">
+
+  <div class="mapCard">
+
+
+
+  <div id="map"></div>
+
+  </div>
+
+
+  <div class="cropCard">
+
+  <h3>Crop Distribution</h3>
+
+  <canvas id="cropChart"></canvas>
+
+  </div>
+
+  </div>
+
+
+  <!-- ANALYTICS -->
+
+  <div class="analytics">
+
+  <div class="costCard">
+
+  <h3>Cost Analysis</h3>
+
+  <canvas id="costChart"></canvas>
+
+  </div>
+  <div class="soil-ai">
+    <h3>Soil Analysis (Upload Image)</h3>
+
+    <input type="file" id="soilImage">
+    <button onclick="uploadSoil()">Analyze Soil</button>
+
+    <div id="soil-result"></div>
+</div>
+
+
+  <div class="activityCard">
+
+  <h3>Recent Activities</h3>
+
+  <ul>
+
+  <li>🚜 Harrowing completed – ABY Farm</li>
+  <li>🌾 Wheat planted – YNS Farm</li>
+  <li>💧 Irrigation started – ARD Farm</li>
+  <li>🌱 Soil check completed</li>
+
+  </ul>
+
+  </div>
+
+  </div>
+
+  </div>
+
+
+
+  <!-- ================= FIELDS ================= -->
+
+  <div id="fields" class="section">
+
+  <h2>Fields</h2>
+
+  <input id="fieldName" placeholder="Field Name">
+  <input id="cropType" placeholder="Crop Type">
+
+  <button onclick="addField()">Add Field</button>
+
+  <table>
+
+  <thead>
+  <tr>
+  <th>Field</th>
+  <th>Crop</th>
+  <th>Action</th>
+  </tr>
+  </thead>
+
+  <tbody id="fieldTable"></tbody>
+
+  </table>
+
+  </div>
+
+
+  <!-- ================= JOBS ================= -->
+
+  <div id="jobs" class="section">
+
+  <h2>Jobs</h2>
+
+  <input id="jobName" placeholder="Job Name">
+  <button onclick="addJob()">Add Job</button>
+
+
+  <h3 style="margin-top:20px;">Active Jobs</h3>
+
+  <table>
+
+  <thead>
+  <tr>
+  <th>Job</th>
+  <th>Action</th>
+  </tr>
+  </thead>
+
+  <tbody id="jobTable"></tbody>
+
+  </table>
+
+
+  <h3 style="margin-top:30px;">Completed Jobs</h3>
+
+  <table>
+
+  <thead>
+  <tr>
+  <th>Job</th>
+  <th>Status</th>
+  </tr>
+  </thead>
+
+  <tbody id="completedJobTable"></tbody>
+
+  </table>
+
+  </div>
+
+
+  <!-- ================= WEATHER ================= -->
+
+  <div id="weather" class="section">
+
+  <h2>Weather</h2>
+
+  <div class="dash-card">
+              <h3>🌬 Wind</h3>
+              <div class="card-value green" id="wind">--</div>
+              <p>Balanced soil hydration supporting strong root growth.</p>
+          </div>
+
+          <div class="dash-card">
+              <h3>🌡 Temperature</h3>
+              <div class="card-value orange" id="temperature">--</div>
+              <p>Optimal environmental temperature for crop growth.</p>
+          </div>
+
+          <div class="dash-card">
+              <h3>💧 Humidity</h3>
+              <div class="card-value blue" id="humidity">--</div>
+              <p>Favorable atmospheric moisture improving plant health.</p>
+          </div>
+
+  </div>
+
+
+  <!-- ================= TEAM ================= -->
+
+  <div id="team" class="section">
+
+  <h2>Team Members</h2>
+
+  <input id="memberName" placeholder="Member Name">
+  <button onclick="addMember()">Add Member</button>
+
+  <ul id="teamList"></ul>
+
+  </div>
+
+
+  <!-- ================= VEHICLES ================= -->
+
+  <div id="vehicles" class="section">
+
+  <h2>Vehicles</h2>
+
+  <input id="vehicleName" placeholder="Vehicle Name">
+  <button onclick="addVehicle()">Add Vehicle</button>
+
+  <ul id="vehicleList"></ul>
+
+  </div>
+
+
+  <!-- ================= SETTINGS ================= -->
+
+  <div id="settings" class="section">
+
+  <h2>Settings</h2>
+
+  <p>Farm Location: India</p>
+  <p>Language: English</p>
+
+  </div>
+
+
+  </div>
+
+  </div>
+
+  <script src="/static/js/main.js"></script>
+
+  </body>
+  </html>

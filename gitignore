@@ -1,0 +1,42 @@
+# Python bytecode and cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Flask / application runtime files
+instance/
+*.log
+
+# Local database (remove this line if you intentionally want to track db.sqlite3)
+db.sqlite3
+*.sqlite3-journal
+
+# Uploaded/generated user files
+uploads/*
+!uploads/.gitkeep
+
+# Test and coverage artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak

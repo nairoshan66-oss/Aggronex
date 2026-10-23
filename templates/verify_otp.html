@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Verify OTP - AgroNex</title>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f4f6f9;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.box{
+background:white;
+padding:40px;
+border-radius:10px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+width:350px;
+text-align:center;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+margin-bottom:20px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#2d6a4f;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1b4332;
+}
+
+a{
+display:block;
+margin-top:15px;
+color:#2d6a4f;
+text-decoration:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% for category, message in messages %}
+{% if category == "forgot_error" %}
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+Swal.fire({
+title: "Invalid OTP",
+text: "{{ message }}",
+icon: "error",
+confirmButtonColor: "#2d6a4f"
+});
+});
+</script>
+{% endif %}
+{% endfor %}
+{% endwith %}
+
+<div class="box">
+
+<h2>Verify OTP</h2>
+<p>Enter the OTP sent to your email</p>
+
+<form method="POST">
+
+<input type="text" name="otp" placeholder="Enter OTP" required>
+
+<button type="submit">Verify OTP</button>
+
+</form>
+
+<a href="/login">Back to Login</a>
+
+</div>
+
+</body>
+</html>

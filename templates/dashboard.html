@@ -203,34 +203,37 @@
 
     <div class="simulation-card">
       <div class="simulation-fields">
-        <label for="simulationSoil">Soil type</label>
+        <label for="simulationSoil">Soil type (જમીનનો પ્રકાર)</label>
         <select id="simulationSoil">
-          <option value="loamy">Loamy</option>
-          <option value="clay">Clay</option>
-          <option value="sandy">Sandy</option>
-          <option value="black">Black soil</option>
+          <option value="loamy">Loamy (ગોરાડુ)</option>
+          <option value="clay">Clay (ચીકણી)</option>
+          <option value="sandy">Sandy (રેતાળ)</option>
+          <option value="black">Black cotton soil (કાળી કપાસિયું)</option>
+          <option value="alluvial">Alluvial (કાંપવાળી)</option>
+          <option value="red">Red soil (લાલ)</option>
+          <option value="silty">Silty (કાંપાળ)</option>
+          <option value="laterite">Laterite (લેટરાઇટ)</option>
+          <option value="saline">Saline (ખારી)</option>
         </select>
 
-        <label for="simulationRainfall">Rainfall</label>
-        <select id="simulationRainfall">
-          <option value="low">Low</option>
-          <option value="medium" selected>Moderate</option>
-          <option value="high">High</option>
-        </select>
+        <label for="simulationRainfall">Annual rainfall (વર્ષનું વરસાદી પ્રમાણ)</label>
+        <div class="simulation-range">
+          <input id="simulationRainfall" type="range" min="0" max="3000" step="50" value="800" oninput="updateSimulationInputs()">
+          <output id="simulationRainfallValue" for="simulationRainfall">800 mm</output>
+        </div>
 
-        <label for="simulationTemperature">Typical temperature</label>
-        <select id="simulationTemperature">
-          <option value="cool">Cool (below 20°C)</option>
-          <option value="mild" selected>Mild (20–28°C)</option>
-          <option value="hot">Hot (above 28°C)</option>
-        </select>
+        <label for="simulationTemperature">Average temperature (સરેરાશ તાપમાન)</label>
+        <div class="simulation-range">
+          <input id="simulationTemperature" type="range" min="0" max="45" step="1" value="25" oninput="updateSimulationInputs()">
+          <output id="simulationTemperatureValue" for="simulationTemperature">25 °C</output>
+        </div>
       </div>
       <button type="button" onclick="simulateCrops()">Suggest suitable crops</button>
       <div id="simulationResult" class="simulation-result" role="status" aria-live="polite">
         <h3>Crop suggestions will appear here</h3>
         <p>Choose your conditions and run the simulation.</p>
       </div>
-      <p class="simulation-note">This is a basic guide. Actual suitability depends on your location, season, seed variety, and local advice.</p>
+      <p class="simulation-note">This is a basic guide (સરળ માર્ગદર્શિકા). Actual suitability depends on location, season, seed variety, and local advice (સ્થાનિક સલાહ).</p>
     </div>
   </div>
 

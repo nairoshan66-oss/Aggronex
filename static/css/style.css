@@ -786,6 +786,9 @@ display:inline-block;
 }
 
 .simulation-fields label{font-weight:600;color:#244238;}
+.simulation-range{display:flex;align-items:center;gap:14px;}
+.simulation-range input[type="range"]{flex:1;accent-color:#2f855a;}
+.simulation-range output{min-width:72px;font-weight:600;color:#24543b;}
 .simulation-fields select{
   width:100%;
   padding:10px 12px;

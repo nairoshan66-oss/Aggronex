@@ -495,44 +495,57 @@ document.getElementById("vehicleName").value="";
 
 function simulateCrops(){
   const soil=document.getElementById("simulationSoil")?.value;
-  const rainfall=document.getElementById("simulationRainfall")?.value;
-  const temperature=document.getElementById("simulationTemperature")?.value;
+  const rainfall=Number(document.getElementById("simulationRainfall")?.value);
+  const temperature=Number(document.getElementById("simulationTemperature")?.value);
   const result=document.getElementById("simulationResult");
-  if(!soil || !rainfall || !temperature || !result) return;
+  if(!soil || !Number.isFinite(rainfall) || !Number.isFinite(temperature) || !result) return;
 
   const profiles=[
-    {name:"Wheat",soils:["loamy","clay"],rain:["low","medium"],temps:["cool","mild"]},
-    {name:"Maize",soils:["loamy","sandy"],rain:["medium"],temps:["mild","hot"]},
-    {name:"Rice",soils:["clay","loamy"],rain:["high"],temps:["mild","hot"]},
-    {name:"Groundnut",soils:["sandy","black"],rain:["low","medium"],temps:["mild","hot"]},
-    {name:"Cotton",soils:["black","loamy"],rain:["low","medium"],temps:["hot"]},
-    {name:"Tomato",soils:["loamy","sandy"],rain:["medium"],temps:["mild"]},
-    {name:"Millet",soils:["sandy","black"],rain:["low"],temps:["hot","mild"]},
-    {name:"Soybean",soils:["black","loamy"],rain:["medium","high"],temps:["mild","hot"]}
+    {name:"Wheat",gu:"ઘઉં",soils:["loamy","clay","alluvial"],rain:[300,900],temp:[10,25]},
+    {name:"Maize",gu:"મકાઈ",soils:["loamy","sandy","alluvial","red"],rain:[500,1200],temp:[18,32]},
+    {name:"Rice",gu:"ડાંગર",soils:["clay","alluvial","silty"],rain:[1000,2500],temp:[20,35]},
+    {name:"Groundnut",gu:"મગફળી",soils:["sandy","red","black"],rain:[400,1000],temp:[20,32]},
+    {name:"Cotton",gu:"કપાસ",soils:["black","alluvial","saline"],rain:[500,1200],temp:[21,35]},
+    {name:"Tomato",gu:"ટામેટાં",soils:["loamy","sandy","alluvial"],rain:[400,1200],temp:[18,30]},
+    {name:"Pearl millet",gu:"બાજરી",soils:["sandy","black","red","saline"],rain:[200,700],temp:[25,40]},
+    {name:"Soybean",gu:"સોયાબીન",soils:["black","loamy","alluvial"],rain:[600,1200],temp:[20,32]},
+    {name:"Sugarcane",gu:"શેરડી",soils:["alluvial","loamy","clay"],rain:[1000,2500],temp:[20,35]},
+    {name:"Potato",gu:"બટાકા",soils:["loamy","silty","alluvial"],rain:[500,1200],temp:[10,25]},
+    {name:"Barley",gu:"જવ",soils:["loamy","clay","saline"],rain:[200,700],temp:[8,22]},
+    {name:"Cashew",gu:"કાજુ",soils:["laterite","sandy","red"],rain:[800,2000],temp:[22,35]},
+    {name:"Date palm",gu:"ખજૂર",soils:["sandy","saline"],rain:[50,400],temp:[25,45]}
   ];
-  const score=crop=>(crop.soils.includes(soil)?2:0)+(crop.rain.includes(rainfall)?2:0)+(crop.temps.includes(temperature)?2:0);
+  const climateScore=(value,[min,max])=>value>=min&&value<=max?3:Math.max(0,3-Math.min(Math.abs(value-min),Math.abs(value-max))/Math.max(1,(max-min)*0.65));
+  const score=crop=>(crop.soils.includes(soil)?6:0)+climateScore(rainfall,crop.rain)+climateScore(temperature,crop.temp);
   const recommendations=profiles
     .map(crop=>({name:crop.name,score:score(crop)}))
     .sort((a,b)=>b.score-a.score)
     .slice(0,3);
-  const soilName={loamy:"loamy",clay:"clay",sandy:"sandy",black:"black soil"}[soil];
-  const rainName={low:"low",medium:"moderate",high:"high"}[rainfall];
-  const tempName={cool:"cool",mild:"mild",hot:"hot"}[temperature];
+  const soilName={loamy:"Loamy (ગોરાડુ)",clay:"Clay (ચીકણી)",sandy:"Sandy (રેતાળ)",black:"Black cotton soil (કાળી જમીન)",alluvial:"Alluvial (કાંપવાળી)",red:"Red soil (લાલ)",silty:"Silty (કાંપવાળી)",laterite:"Laterite (લેટરાઇટ)",saline:"Saline (ખારી)"}[soil];
 
   result.replaceChildren();
   const heading=document.createElement("h3");
-  heading.textContent="Suggested crops";
+  heading.textContent="Suggested crops (સૂચિત પાક)";
   result.appendChild(heading);
   const list=document.createElement("ol");
   recommendations.forEach(crop=>{
     const item=document.createElement("li");
-    item.textContent=crop.name;
+    item.textContent=`${crop.name} (${crop.gu})`;
     list.appendChild(item);
   });
   result.appendChild(list);
   const reason=document.createElement("p");
-  reason.textContent=`Suggestions are based on ${soilName} soil, ${rainName} rainfall, and ${tempName} conditions.`;
+  reason.textContent=`Based on ${soilName}, ${rainfall} mm annual rainfall (વર્ષનું વરસાદી પ્રમાણ), and ${temperature} °C average temperature (સરેરાશ તાપમાન).`;
   result.appendChild(reason);
+}
+
+function updateSimulationInputs(){
+  const rainfall=document.getElementById("simulationRainfall");
+  const temperature=document.getElementById("simulationTemperature");
+  const rainfallValue=document.getElementById("simulationRainfallValue");
+  const temperatureValue=document.getElementById("simulationTemperatureValue");
+  if(rainfall && rainfallValue) rainfallValue.textContent=`${rainfall.value} mm`;
+  if(temperature && temperatureValue) temperatureValue.textContent=`${temperature.value} °C`;
 }
 
 /* ================= INIT ================= */
@@ -541,6 +554,7 @@ renderFields();
 renderJobs();
 renderCompletedJobs();
 renderTeam();
+updateSimulationInputs();
 updateDashboard();
 
 function uploadSoil() {

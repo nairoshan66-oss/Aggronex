@@ -518,14 +518,14 @@ function simulateCrops(){
   const climateScore=(value,[min,max])=>value>=min&&value<=max?3:Math.max(0,3-Math.min(Math.abs(value-min),Math.abs(value-max))/Math.max(1,(max-min)*0.65));
   const score=crop=>(crop.soils.includes(soil)?6:0)+climateScore(rainfall,crop.rain)+climateScore(temperature,crop.temp);
   const recommendations=profiles
-    .map(crop=>({name:crop.name,score:score(crop)}))
+    .map(crop=>({name:crop.name,gu:crop.gu,score:score(crop)}))
     .sort((a,b)=>b.score-a.score)
     .slice(0,3);
   const soilName={loamy:"Loamy (ગોરાડુ)",clay:"Clay (ચીકણી)",sandy:"Sandy (રેતાળ)",black:"Black cotton soil (કાળી જમીન)",alluvial:"Alluvial (કાંપવાળી)",red:"Red soil (લાલ)",silty:"Silty (કાંપવાળી)",laterite:"Laterite (લેટરાઇટ)",saline:"Saline (ખારી)"}[soil];
 
   result.replaceChildren();
   const heading=document.createElement("h3");
-  heading.textContent="Suggested crops (સૂચિત પાક)";
+  heading.textContent="Suggested crops";
   result.appendChild(heading);
   const list=document.createElement("ol");
   recommendations.forEach(crop=>{
@@ -535,7 +535,7 @@ function simulateCrops(){
   });
   result.appendChild(list);
   const reason=document.createElement("p");
-  reason.textContent=`Based on ${soilName}, ${rainfall} mm annual rainfall (વર્ષનું વરસાદી પ્રમાણ), and ${temperature} °C average temperature (સરેરાશ તાપમાન).`;
+  reason.textContent=`Based on ${soilName}, ${rainfall} mm annual rainfall, and ${temperature} °C average temperature.`;
   result.appendChild(reason);
 }
 

@@ -264,10 +264,16 @@ setInterval(getWeather, 10 * 60 * 1000);
 
 /* ================= DASHBOARD DATA ================= */
 
-let fields=[];
-let jobs=[];
+// Example records give the dashboard useful content on first visit.
+let fields=[
+  {name:"North Field",crop:"Wheat"},
+  {name:"Riverside Plot",crop:"Maize"},
+  {name:"Orchard Block",crop:"Tomatoes"}
+];
+let jobs=["Irrigate North Field","Inspect maize crop","Apply organic fertilizer"];
 let completedJobs=0;
 let completedJobList=[];
+let teamMembers=["Aarav Patel — Farm Manager","Maya Shah — Crop Specialist","Rohan Mehta — Irrigation Technician"];
 
 function updateDashboard(){
 
@@ -440,16 +446,29 @@ let name=document.getElementById("memberName").value;
 
 if(name=="") return;
 
-let list=document.getElementById("teamList");
-
-let li=document.createElement("li");
-
-li.innerHTML=name+" <button onclick='this.parentElement.remove()'>Remove</button>";
-
-list.appendChild(li);
+teamMembers.push(name);
+renderTeam();
 
 document.getElementById("memberName").value="";
 
+}
+
+function renderTeam(){
+  const list=document.getElementById("teamList");
+  if(!list) return;
+  list.innerHTML="";
+  teamMembers.forEach((member,index)=>{
+    const li=document.createElement("li");
+    li.append(document.createTextNode(member+" "));
+    const button=document.createElement("button");
+    button.textContent="Remove";
+    button.addEventListener("click",()=>{
+      teamMembers.splice(index,1);
+      renderTeam();
+    });
+    li.appendChild(button);
+    list.appendChild(li);
+  });
 }
 
 /* ================= VEHICLES ================= */
@@ -474,6 +493,10 @@ document.getElementById("vehicleName").value="";
 
 /* ================= INIT ================= */
 
+renderFields();
+renderJobs();
+renderCompletedJobs();
+renderTeam();
 updateDashboard();
 
 function uploadSoil() {

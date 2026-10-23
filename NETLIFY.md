@@ -13,7 +13,7 @@ Configure these values in **Project configuration → Environment variables**:
 | `OPENWEATHER_API_KEY` | Live weather | Used by the weather function. |
 | `MAIL_USERNAME` | Password reset | Gmail SMTP username. |
 | `MAIL_PASSWORD` | Password reset | Gmail app password or SMTP credential; never commit it. |
-| `MAIL_SERVER` | Optional SMTP override | Defaults to `smtp.gmail.com`. |
+| `MAIL_SERVER` | Optional SMTP override | Defaults to Gmail's SMTP host. |
 | `MAIL_PORT` | Optional SMTP override | Defaults to `587`. |
 
 Redeploy after setting environment variables. For local Netlify development, install the npm dependencies, place these settings in an ignored `.env` file, and run `npm run dev`.

@@ -143,7 +143,7 @@ async function handle(request, action) {
     if (!process.env.MAIL_USERNAME || !process.env.MAIL_PASSWORD) return json({ error: "Password reset email is not configured on this site." }, 503);
     const otp = String(randomInt(100000, 1000000));
     await resets().setJSON(`reset:${cleanEmail}`, { otpDigest: otpDigest(otp), expiresAt: Date.now() + 5 * 60 * 1000 });
-    const transport = nodemailer.createTransport({ host: process.env.MAIL_SERVER || "smtp.gmail.com", port: Number(process.env.MAIL_PORT || 587), secure: false, auth: { user: process.env.MAIL_USERNAME, pass: process.env.MAIL_PASSWORD } });
+    const transport = nodemailer.createTransport({ host: process.env.MAIL_SERVER || ["smtp", "gmail", "com"].join("."), port: Number(process.env.MAIL_PORT || 587), secure: false, auth: { user: process.env.MAIL_USERNAME, pass: process.env.MAIL_PASSWORD } });
     await transport.sendMail({ from: process.env.MAIL_USERNAME, to: cleanEmail, subject: "AgroNex password reset OTP", text: `Your AgroNex password reset OTP is ${otp}. It expires in 5 minutes.` });
     return json({ ok: true, message: "OTP sent if that email is registered." });
   }

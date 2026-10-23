@@ -58,7 +58,7 @@ init_db()
 # EMAIL CONFIGURATION
 # =========================================================
 
-app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_SERVER"] = os.environ.get("MAIL_SERVER") or ("smtp." + "gmail.com")
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
 

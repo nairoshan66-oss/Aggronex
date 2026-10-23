@@ -491,6 +491,50 @@ document.getElementById("vehicleName").value="";
 
 }
 
+/* ================= CROP SIMULATION ================= */
+
+function simulateCrops(){
+  const soil=document.getElementById("simulationSoil")?.value;
+  const rainfall=document.getElementById("simulationRainfall")?.value;
+  const temperature=document.getElementById("simulationTemperature")?.value;
+  const result=document.getElementById("simulationResult");
+  if(!soil || !rainfall || !temperature || !result) return;
+
+  const profiles=[
+    {name:"Wheat",soils:["loamy","clay"],rain:["low","medium"],temps:["cool","mild"]},
+    {name:"Maize",soils:["loamy","sandy"],rain:["medium"],temps:["mild","hot"]},
+    {name:"Rice",soils:["clay","loamy"],rain:["high"],temps:["mild","hot"]},
+    {name:"Groundnut",soils:["sandy","black"],rain:["low","medium"],temps:["mild","hot"]},
+    {name:"Cotton",soils:["black","loamy"],rain:["low","medium"],temps:["hot"]},
+    {name:"Tomato",soils:["loamy","sandy"],rain:["medium"],temps:["mild"]},
+    {name:"Millet",soils:["sandy","black"],rain:["low"],temps:["hot","mild"]},
+    {name:"Soybean",soils:["black","loamy"],rain:["medium","high"],temps:["mild","hot"]}
+  ];
+  const score=crop=>(crop.soils.includes(soil)?2:0)+(crop.rain.includes(rainfall)?2:0)+(crop.temps.includes(temperature)?2:0);
+  const recommendations=profiles
+    .map(crop=>({name:crop.name,score:score(crop)}))
+    .sort((a,b)=>b.score-a.score)
+    .slice(0,3);
+  const soilName={loamy:"loamy",clay:"clay",sandy:"sandy",black:"black soil"}[soil];
+  const rainName={low:"low",medium:"moderate",high:"high"}[rainfall];
+  const tempName={cool:"cool",mild:"mild",hot:"hot"}[temperature];
+
+  result.replaceChildren();
+  const heading=document.createElement("h3");
+  heading.textContent="Suggested crops";
+  result.appendChild(heading);
+  const list=document.createElement("ol");
+  recommendations.forEach(crop=>{
+    const item=document.createElement("li");
+    item.textContent=crop.name;
+    list.appendChild(item);
+  });
+  result.appendChild(list);
+  const reason=document.createElement("p");
+  reason.textContent=`Suggestions are based on ${soilName} soil, ${rainName} rainfall, and ${tempName} conditions.`;
+  result.appendChild(reason);
+}
+
 /* ================= INIT ================= */
 
 renderFields();

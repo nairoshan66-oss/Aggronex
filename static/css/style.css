@@ -765,6 +765,56 @@ border-radius:6px;
 font-size:13px;
 display:inline-block;
 }
+
+/* ================= CROP SIMULATION ================= */
+
+.simulation-card{
+  max-width:760px;
+  margin-top:18px;
+  padding:24px;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.simulation-fields{
+  display:grid;
+  grid-template-columns:190px minmax(180px,1fr);
+  gap:14px 18px;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.simulation-fields label{font-weight:600;color:#244238;}
+.simulation-fields select{
+  width:100%;
+  padding:10px 12px;
+  border:1px solid #cbd5d0;
+  border-radius:7px;
+  background:#fff;
+  color:#24342e;
+  font:inherit;
+}
+
+.simulation-result{
+  margin-top:20px;
+  padding:16px 20px;
+  border-left:4px solid #2f855a;
+  border-radius:6px;
+  background:#f0f7f2;
+}
+
+.simulation-result h3{margin:0 0 8px;color:#24543b;}
+.simulation-result ol{margin:8px 0;padding-left:24px;}
+.simulation-result li{padding:3px 0;}
+.simulation-result p{margin:8px 0 0;}
+.simulation-note{margin:14px 0 0;font-size:13px;color:#66736c;}
+
+@media(max-width:600px){
+  .simulation-card{padding:18px;}
+  .simulation-fields{grid-template-columns:1fr;gap:7px;}
+  .simulation-fields select{margin-bottom:8px;}
+}
 #map {
     margin-top: 100px;
 }

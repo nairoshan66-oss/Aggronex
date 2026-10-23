@@ -17,7 +17,7 @@ for (const page of pages) {
   html = html.replaceAll("{{ google_client_id }}", process.env.GOOGLE_CLIENT_ID ?? "");
   if (page === "login" && !process.env.GOOGLE_CLIENT_ID) {
     html = html.replace(/\s*<script src="https:\/\/accounts\.google\.com\/gsi\/client"[^>]*><\/script>/, "");
-    html = html.replace(/<div id="g_id_onload"[\s\S]*?<\/div>\s*<div class="g_id_signin"[\s\S]*?<\/div>\s*<script>[\s\S]*?<\/script>/, "<p>Google sign-in is unavailable until GOOGLE_CLIENT_ID is configured.</p>");
+    html = html.replace(/<!-- Divider -->[\s\S]*?<!-- Sign up -->/, "<!-- Sign up -->");
   }
   if (page !== "index") {
     const dir = path.join(output, page === "forgot_password" ? "forgot-password" : page === "verify_otp" ? "verify-otp" : page === "reset_password" ? "reset-password" : page);

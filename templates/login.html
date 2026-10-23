@@ -211,7 +211,7 @@
 
 <script>
 function handleCredentialResponse(response) {
-    fetch("/google-login", {
+    fetch("/api/google-login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -222,6 +222,10 @@ function handleCredentialResponse(response) {
     .then(data => {
         if (data.status === "success") {
             window.location.href = "/dashboard";
+        } else if (data.ok) {
+            window.location.href = "/dashboard";
+        } else if (data.error) {
+            alert(data.error);
         }
     });
 }
@@ -242,5 +246,6 @@ function handleCredentialResponse(response) {
   </div>
   <!-- Script -->
   <script src="/static/js/script.js"></script>
+  <script src="/static/js/auth.js"></script>
 </body>
 </html>

@@ -210,7 +210,7 @@ async function getWeather() {
 
     try {
 
-        let res = await fetch(`/live-data?lat=${lat}&lon=${lon}`);
+        let res = await fetch(`/api/live-data?lat=${lat}&lon=${lon}`);
         let data = await res.json();
         let temp = data.temperature;
 let humidityVal = data.humidity;
@@ -470,7 +470,7 @@ function uploadSoil() {
     const formData = new FormData();
     formData.append("image", file);
 
-    fetch("/analyze-image", {
+    fetch("/api/analyze-image", {
         method: "POST",
         body: formData
     })

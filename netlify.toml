@@ -1,0 +1,22 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/logout"
+  to = "/api/logout"
+  status = 200
+
+[[redirects]]
+  from = "/live-data"
+  to = "/api/live-data"
+  status = 200
+
+[[redirects]]
+  from = "/analyze-image"
+  to = "/api/analyze-image"
+  status = 200

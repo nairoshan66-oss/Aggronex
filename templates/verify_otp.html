@@ -84,7 +84,7 @@ confirmButtonColor: "#2d6a4f"
 <h2>Verify OTP</h2>
 <p>Enter the OTP sent to your email</p>
 
-<form method="POST">
+<form method="POST" action="/verify-otp">
 
 <input type="text" name="otp" placeholder="Enter OTP" required>
 
@@ -95,6 +95,8 @@ confirmButtonColor: "#2d6a4f"
 <a href="/login">Back to Login</a>
 
 </div>
+
+<script src="/static/js/auth.js"></script>
 
 </body>
 </html>

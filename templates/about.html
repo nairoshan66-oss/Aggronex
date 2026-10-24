@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About - AgroNex</title>
 <link rel="stylesheet" href="/static/css/style.css">
 </head>
@@ -10,11 +12,13 @@
   <a href="/">
     <div class="logo">🌱 AgroNex</div>
   </a>
-  <div class="menu" onclick="toggleMenu()">☰</div>
+  <button type="button" class="menu" onclick="toggleMenu()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="navLinks">☰</button>
     <div class="nav-links" id="navLinks">
     <a href="/">Home</a>
     <a href="/dashboard">Dashboard</a>
     <a href="/about">About</a>
+    <a href="/login" class="mobile-only-nav login-highlight">Login</a>
+    <a href="/register" class="mobile-only-nav login-highlight">Register</a>
   </div>
 </nav>
 

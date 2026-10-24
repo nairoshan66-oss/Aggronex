@@ -1,19 +1,28 @@
 /* ================= NAVBAR MENU ================= */
 
-function toggleNavbar(){
-  let nav = document.getElementById("navLinks");
-  if(nav){
-    nav.classList.toggle("active");
+function toggleMenu(forceOpen){
+  const nav=document.getElementById("navLinks");
+  const button=document.querySelector(".menu");
+  if(!nav) return;
+  const isOpen=typeof forceOpen==="boolean"?forceOpen:!nav.classList.contains("active");
+  nav.classList.toggle("active",isOpen);
+  if(button){
+    button.setAttribute("aria-expanded",String(isOpen));
+    button.setAttribute("aria-label",isOpen?"Close navigation menu":"Open navigation menu");
   }
 }
+function toggleNavbar(forceOpen){ toggleMenu(forceOpen); }
+document.addEventListener("keydown",event=>{ if(event.key==="Escape") toggleMenu(false); });
+document.addEventListener("click",event=>{ if(event.target.closest("#navLinks a")) toggleMenu(false); });
 
 /* ================= SIDEBAR ================= */
 
 function toggleSidebar(){
-  let sidebar = document.getElementById("sidebar");
-  if(sidebar){
-    sidebar.classList.toggle("active");
-  }
+  const sidebar=document.getElementById("sidebar");
+  const button=document.querySelector(".menuBtn");
+  if(!sidebar) return;
+  const isOpen=sidebar.classList.toggle("active");
+  if(button) button.setAttribute("aria-expanded",String(isOpen));
 }
 
 /* ================= LOGIN ================= */
